@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Siapkan variabel
     let escapeCount = 0;
-    const maxEscapes = 10; // Tombol akan kabur sebanyak 5 kali
+    const maxEscapes = 15; // Tombol akan kabur sebanyak 5 kali
 
     // Cek apakah elemen tombol ditemukan sebelum menambahkan event listener
     if (runawayButton && container) {
