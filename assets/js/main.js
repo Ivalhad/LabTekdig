@@ -79,55 +79,61 @@ document.addEventListener('keydown', function (e) {
 });
 
 
-// --- JAVASCRIPT UNTUK LOGIKA TOMBOL KABUR ---
+// --- JAVASCRIPT UNTUK LOGIKA TOMBOL KABUR DENGAN TEKS BERUBAH ---
 
-// Pastikan skrip berjalan setelah semua elemen HTML dimuat
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Ambil elemen tombol dan containernya
     const runawayButton = document.getElementById('runaway-button');
     const container = document.querySelector('.container');
 
-    // 2. Siapkan variabel
-    let escapeCount = 0;
-    const maxEscapes = 15; // Tombol akan kabur sebanyak 5 kali
+    let clickCount = 0;
+    const maxClicks = 10;
 
-    // Cek apakah elemen tombol ditemukan sebelum menambahkan event listener
+    // Siapkan array (daftar) tulisan untuk setiap klik
+    const buttonMessages = [
+        "Klik sini",              // Pesan setelah klik ke-1
+        "Klik sini atuh",         // Pesan setelah klik ke-2
+        "Yang bener ngekliknya",  // Pesan setelah klik ke-3
+        "Sinii atuh",
+        "eaa",
+        "eaa",
+        "eaa",
+        "eaaa",
+        "eaaa",            // Pesan setelah klik ke-4
+        "Eaaaa, ketangkep juga!"  // Pesan final setelah klik ke-5
+    ];
+
     if (runawayButton && container) {
+        runawayButton.addEventListener('click', (event) => {
+            // Logika ini hanya berjalan untuk 5 klik pertama
+            if (clickCount < maxClicks) {
+                // Selalu cegah link agar tidak terbuka selama proses "kabur"
+                event.preventDefault();
 
-        // 3. Tambahkan event listener saat kursor mendekati tombol
-        runawayButton.addEventListener('mouseover', () => {
-            // Cek apakah tombol masih harus kabur
-            if (escapeCount < maxEscapes) {
-                // Ambil ukuran container dan tombol
-                const containerRect = container.getBoundingClientRect();
-                const buttonRect = runawayButton.getBoundingClientRect();
+                // Tambah jumlah klik
+                clickCount++;
 
-                // Hitung posisi acak baru di dalam container
-                const newTop = Math.random() * (containerRect.height - buttonRect.height);
-                const newLeft = Math.random() * (containerRect.width - buttonRect.width);
+                // Ubah tulisan tombol sesuai urutan di array
+                // (index array dimulai dari 0, jadi kita pakai clickCount - 1)
+                runawayButton.textContent = buttonMessages[clickCount - 1];
 
-                // Terapkan posisi baru ke tombol
-                runawayButton.style.top = `${newTop}px`;
-                runawayButton.style.left = `${newLeft}px`;
-
-                // Tambah hitungan kabur
-                escapeCount++;
-
-                // Jika sudah kabur 5x, ubah teks dan tampilannya
-                if (escapeCount === maxEscapes) {
-                    runawayButton.textContent = "Oke, Aku Nyerah!";
+                // Jika ini adalah klik terakhir, buat tombol berhenti dan berubah warna
+                if (clickCount === maxClicks) {
                     runawayButton.classList.add('caught');
+                } else {
+                    // Jika BUKAN klik terakhir, pindahkan tombol ke posisi acak
+                    const containerRect = container.getBoundingClientRect();
+                    const buttonRect = runawayButton.getBoundingClientRect();
+
+                    const newTop = Math.random() * (containerRect.height - buttonRect.height);
+                    const newLeft = Math.random() * (containerRect.width - buttonRect.width);
+
+                    runawayButton.style.top = `${newTop}px`;
+                    runawayButton.style.left = `${newLeft}px`;
                 }
             }
-        });
-
-        // 4. Mencegah link di-klik sebelum waktunya
-        runawayButton.addEventListener('click', (event) => {
-            // Jika hitungan kabur belum mencapai 5, batalkan aksi default (pindah halaman)
-            if (escapeCount < maxEscapes) {
-                event.preventDefault();
-            }
+            // Setelah 5 kali klik, kondisi di atas tidak terpenuhi lagi,
+            // dan tombol akan berfungsi sebagai link normal.
         });
     }
 });
