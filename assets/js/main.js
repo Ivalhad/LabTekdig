@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "eaa",
         "eaaa",
         "eaaa",            // Pesan setelah klik ke-4
-        "Eaaaa, ketangkep juga!"  // Pesan final setelah klik ke-5
+        "dah ah capek"  // Pesan final setelah klik ke-5
     ];
 
     if (runawayButton && container) {
