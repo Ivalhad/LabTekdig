@@ -77,3 +77,57 @@ document.addEventListener('keydown', function (e) {
         e.preventDefault();
     }
 });
+
+
+// --- JAVASCRIPT UNTUK LOGIKA TOMBOL KABUR ---
+
+// Pastikan skrip berjalan setelah semua elemen HTML dimuat
+document.addEventListener('DOMContentLoaded', () => {
+
+    // 1. Ambil elemen tombol dan containernya
+    const runawayButton = document.getElementById('runaway-button');
+    const container = document.querySelector('.container');
+
+    // 2. Siapkan variabel
+    let escapeCount = 0;
+    const maxEscapes = 10; // Tombol akan kabur sebanyak 5 kali
+
+    // Cek apakah elemen tombol ditemukan sebelum menambahkan event listener
+    if (runawayButton && container) {
+
+        // 3. Tambahkan event listener saat kursor mendekati tombol
+        runawayButton.addEventListener('mouseover', () => {
+            // Cek apakah tombol masih harus kabur
+            if (escapeCount < maxEscapes) {
+                // Ambil ukuran container dan tombol
+                const containerRect = container.getBoundingClientRect();
+                const buttonRect = runawayButton.getBoundingClientRect();
+
+                // Hitung posisi acak baru di dalam container
+                const newTop = Math.random() * (containerRect.height - buttonRect.height);
+                const newLeft = Math.random() * (containerRect.width - buttonRect.width);
+
+                // Terapkan posisi baru ke tombol
+                runawayButton.style.top = `${newTop}px`;
+                runawayButton.style.left = `${newLeft}px`;
+
+                // Tambah hitungan kabur
+                escapeCount++;
+
+                // Jika sudah kabur 5x, ubah teks dan tampilannya
+                if (escapeCount === maxEscapes) {
+                    runawayButton.textContent = "Oke, Aku Nyerah!";
+                    runawayButton.classList.add('caught');
+                }
+            }
+        });
+
+        // 4. Mencegah link di-klik sebelum waktunya
+        runawayButton.addEventListener('click', (event) => {
+            // Jika hitungan kabur belum mencapai 5, batalkan aksi default (pindah halaman)
+            if (escapeCount < maxEscapes) {
+                event.preventDefault();
+            }
+        });
+    }
+});
